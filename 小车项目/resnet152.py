@@ -335,13 +335,11 @@ def default_categorical(resolution, use_smooth):
     # 输入层
     img_in = Input(shape=(resolution[0], resolution[1], 3),
                    name='img_in')
-    # print("img is", img_in, "\n")
     x = img_in
-    # out_filters = initial_filters
     x = Convolution2D(initial_filters, (7, 7), strides=(2, 2), padding='same', use_bias=False)(x)
     x = BatchNormalization()(x)
     x = relu(x)
-    x = MaxPooling2D(strides=(2, 2))(x)
+    x = MaxPooling2D((3, 3), strides=(2, 2))(x)
     x = Lambda(resnetstruct, arguments={'filters': initial_filters})(x)
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
     angle_out = Dense(15, activation='softmax', name='angle_out')(x)
